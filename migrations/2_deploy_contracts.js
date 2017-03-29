@@ -1,5 +1,5 @@
-var Bookchain = artifacts.require("./Bookchain.sol");
+var Book = artifacts.require("./Book.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(Bookchain);
+  deployer.deploy(Book);
 };
