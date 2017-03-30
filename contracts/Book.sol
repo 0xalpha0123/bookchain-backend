@@ -24,7 +24,9 @@ contract Book {
     }
 
     function returnBook() returns (Status) {
-        status = Status.Available;
+        if (status == Status.Unavailable) {
+            status = Status.Available;
+        }
         return status;
     }
 
