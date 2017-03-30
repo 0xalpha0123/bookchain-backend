@@ -38,9 +38,9 @@ contract('Book', function(accounts) {
     }).then(function(instance) {
       // eval(pry.it)
       instance.checkout();
-      instance.isAvailable().then(function(i) {assert.isNotTrue(i);})
+      instance.isAvailable().then(function(i) {assert.isNotTrue(i);});
       instance.returnBook();
-      instance.isAvailable().then(function(i) {assert.isTrue(i);})
+      instance.isAvailable().then(function(i) {assert.isTrue(i);});
     });
   });
 
