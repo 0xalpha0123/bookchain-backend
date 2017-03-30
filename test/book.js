@@ -2,13 +2,23 @@ var Book = artifacts.require("Book");
 pry = require('pryjs');
 contract('Book', function(accounts) {
 
-  it('should have a name', function() {
+  it('should have a title', function() {
     var newBook = Book.new("Moby Dick", "Van Dyke");
     return newBook.then(function(book) {
-      return book.name.call();
-    }).then(function(name) {
-      var parsedString = web3.toAscii(name);
+      return book.title.call();
+    }).then(function(title) {
+      var parsedString = web3.toAscii(title);
       assert.include(parsedString, 'Moby Dick');
+    });
+  });
+
+  it('should have a author', function() {
+    var newBook = Book.new("Moby Dick", "Van Dyke");
+    return newBook.then(function(book) {
+      return book.author.call();
+    }).then(function(author) {
+      var parsedString = web3.toAscii(author);
+      assert.include(parsedString, 'Van Dyke');
     });
   });
 

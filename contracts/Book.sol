@@ -3,15 +3,15 @@ pragma solidity ^0.4.0;
 
 contract Book {
 
-    bytes32 public name;
+    bytes32 public title;
     bytes32 public author;
     address public owner;
     enum Status { Available, Unavailable }
     Status public status;
 
-    function Book(bytes32 _name, bytes32 _author) {
+    function Book(bytes32 _title, bytes32 _author) {
         owner = msg.sender;
-        name = _name;
+        title = _title;
         author = _author;
         status = Status.Available;
     }
