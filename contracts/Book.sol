@@ -1,14 +1,15 @@
 pragma solidity ^0.4.0;
+
+
 contract Book {
 
     bytes32 public name;
     bytes32 public author;
     address public owner;
-    address public borrower;
     enum Status { Available, Unavailable }
     Status public status;
 
-    function Book(bytes32 _name, bytes32 _author) /*returns(bool success)*/ {
+    function Book(bytes32 _name, bytes32 _author) {
         owner = msg.sender;
         name = _name;
         author = _author;

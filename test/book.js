@@ -7,7 +7,7 @@ contract('Book', function(accounts) {
     return book.then(function(instance) {
       return instance.name.call();
     }).then(function(name) {
-      var parsedString = web3.toAscii(name)
+      var parsedString = web3.toAscii(name);
       assert.include(parsedString, 'Moby Dick');
     });
   });
