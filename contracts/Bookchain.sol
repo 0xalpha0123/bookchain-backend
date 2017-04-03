@@ -20,11 +20,13 @@ contract Bookchain {
     // returns structs/tuples with info for all available books 
     // title, author, image_url, contract address
     // 
+    // maybe: event in book contract to update available books array
+    //        when status of book changes
+
     function availableBooks() returns () {
         // for each address in bookshelf
-        // check book status
-        // if book is available
-        // push struct of {title, author,  } 
+        // if book.status is available
+        // push struct of {title, author, owner address?, image_url, book contract address} 
         // to available books array
     }
 }
