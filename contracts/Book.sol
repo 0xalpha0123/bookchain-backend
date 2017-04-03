@@ -6,6 +6,7 @@ contract Book {
     bytes32 public title;
     bytes32 public author;
     address public owner;
+    // image url = ipfs address?
     enum Status { Available, Unavailable }
     Status public status;
 
