@@ -12,10 +12,10 @@ contract Book {
     address public borrower;
 
     // Book State
-    bytes32 public title;
-    bytes32 public author;
+    string public title;
+    string public author;
+    string public imageUrl; //ipfs?
     address public owner;
-    string public image_url; //ipfs?
 
     enum Status { Available, Unavailable }
     Status public status;
@@ -23,11 +23,17 @@ contract Book {
     // Modifiers
     modifier onlyOwner() { if(msg.sender != owner) throw; _; }
 
+    // Events
+    event bookAddedToShelf(address bookContract, string title, string author, string imageUrl);
+    event bookMadeAvailable(address bookContract);
+    event bookMadeUnavailable(address bookContract);
+
     // Constructor
-    function Book(bytes32 _title, bytes32 _author, address _arbiter) {
+    function Book(string _title, string _author, string _imageUrl, address _arbiter) {
         owner = msg.sender;
         title = _title;
         author = _author;
+        imageUrl = _imageUrl;
         status = Status.Available;
         arbiter = _arbiter;
     }
@@ -63,7 +69,7 @@ contract Book {
     }
 
     // contract self-destruct
-    // ??? --- should arbiter be able to kill?
+    // ??? should arbiter be able to kill ???
     function kill() onlyOwner() {
         selfdestruct(owner);
     }
