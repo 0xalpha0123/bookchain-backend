@@ -6,15 +6,33 @@ contract Bookchain {
     // available books array = dynamic array of available book structs
     // available book struct = { title, author, owner address?, image_url, book contract address}
 
+    // address (public?) bookcoinAddress; or is this an inheritance
+
     function Bookchain() {
         // set the contract owner
-        // initialize money
+        /*
+            create new BookCoin contract
+            set owner to minter
+            give minter 1000BKC
+            set currency contract address 
+        */
     }
 
     function createBook() {
         // when you create a book 
         // and it returns true
         // store address in bookshelf array
+        /*
+            msg.sender gets 3BKC
+        */
+    }
+
+    function borrowBook(address _bookContract) {
+        // if book is available
+        // create a borrow agreement b/w owner and borrower
+        /*
+            upon completion both parties get 1BKC
+        */
     }
 
     // returns structs/tuples with info for all available books 

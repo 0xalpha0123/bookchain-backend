@@ -8,9 +8,9 @@ contract BookCoin {
 
   // Human State
   string public name;
-  uint8 public decimals;
   string public symbol;
   string public version;
+  uint8 public decimals;
 
   // Minter State
   address public centralMinter;
@@ -88,7 +88,7 @@ contract BookCoin {
   // Backed by Ether functions 
   // Must create the contract so that it has enough Ether to buy back ALL tokens on the market,
   // or else the contract will be insolvent and users won't be able to sell their tokens
-  function SetPrices(uint256 _newSellPrice, uint256 _newBuyPrice) onlyMinter {
+  function setPrices(uint256 _newSellPrice, uint256 _newBuyPrice) onlyMinter {
     sellPrice = _newSellPrice;
     buyPrice = _newBuyPrice;
   }

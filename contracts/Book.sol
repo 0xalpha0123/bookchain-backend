@@ -2,11 +2,15 @@ pragma solidity ^0.4.10;
 
 contract Book {
 
+    // each instance of this contract represents a physical book 
+    // this contract will store the deposits
+    // and distribute rewards according to user interaction
+
     bytes32 public title;
     bytes32 public author;
     address public owner;
-    string public image_url;
-    // image url = ipfs address?
+    string public image_url; //ipfs?
+
     enum Status { Available, Unavailable }
     Status public status;
 
