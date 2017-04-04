@@ -114,4 +114,6 @@ contract BookCoin {
       return revenue;
     }
   }
+
+  // self destruct function
 }

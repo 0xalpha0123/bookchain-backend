@@ -1,4 +1,6 @@
 pragma solidity ^0.4.10;
+import "./Book.sol";
+import "./BookCoin.sol";
 
 contract Bookchain {
 
@@ -8,8 +10,15 @@ contract Bookchain {
 
     // address (public?) bookcoinAddress; or is this an inheritance
 
+    // Bookchain State
+    address public owner;
+
+    // Modifiers
+    modifier onlyOwner() { if(msg.sender != owner) throw; _; }
+
     function Bookchain() {
         // set the contract owner
+        owner = msg.sender;
         /*
             create new BookCoin contract
             set owner to minter
@@ -46,5 +55,10 @@ contract Bookchain {
         // if book.status is available
         // push struct of {title, author, owner address?, image_url, book contract address} 
         // to available books array
+    }
+
+    // contract self-destruct
+    function kill() onlyOwner() {
+        selfdestruct(owner);
     }
 }
