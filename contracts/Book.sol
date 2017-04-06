@@ -1,4 +1,4 @@
-pragma solidity ^0.4.10;
+pragma solidity ^0.4.8;
 
 contract Book {
 
@@ -12,28 +12,22 @@ contract Book {
     address public borrower;
 
     // Book State
-    string public title;
-    string public author;
-    string public imageUrl; //ipfs?
+    string public isbn;
     address public owner;
 
     enum Status { Available, Unavailable }
     Status public status;
 
     // Modifiers
-    modifier onlyOwner() { if(msg.sender != owner) throw; _; }
+    modifier onlyOwner { if(msg.sender != owner) throw; _; }
 
     // Events
-    event bookAddedToShelf(address bookContract, string title, string author, string imageUrl);
-    event bookMadeAvailable(address bookContract);
-    event bookMadeUnavailable(address bookContract);
+    
 
     // Constructor
-    function Book(string _title, string _author, string _imageUrl, address _arbiter) {
+    function Book(string _isbn, address _arbiter) {
         owner = msg.sender;
-        title = _title;
-        author = _author;
-        imageUrl = _imageUrl;
+        isbn = _isbn;
         status = Status.Available;
         arbiter = _arbiter;
     }
@@ -70,7 +64,7 @@ contract Book {
 
     // contract self-destruct
     // ??? should arbiter be able to kill ???
-    function kill() onlyOwner() {
+    function kill() onlyOwner {
         selfdestruct(owner);
     }
 }
