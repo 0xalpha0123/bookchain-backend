@@ -9,7 +9,7 @@ contract Bookchain {
 
     struct Volume {
         string isbn;
-        address contractAddress;
+        // address contractAddress;
     }
     // available books array = dynamic array of available book structs
     // available book struct = { title, author, owner address?, image_url, book contract address}
@@ -38,17 +38,17 @@ contract Bookchain {
         */
     }
 
-    function createBook(string _isbn) returns(address) {
+    function createBook(string _isbn) returns(bool) {
         // when you create a book 
-        address newBook = new Book(_isbn, owner /* arbiter */ );
+        // address newBook = new Book(_isbn, owner /* arbiter */ );
         // store address in bookshelf array
         bookshelf.push( Volume({
             isbn: _isbn,
-            contractAddress: address(newBook)
+            // contractAddress: address(newBook)
         }));
         // trigger event for react frontend to pick up 
-        bookAddedToShelf(address(newBook), _isbn, msg.sender);
-        return address(newBook);
+        // bookAddedToShelf(address(newBook), _isbn, msg.sender);
+        return true;
         // and it returns true
         /*
             msg.sender gets 3BKC
@@ -59,8 +59,8 @@ contract Bookchain {
         return bookshelf.length;
     }
 
-    function getBookshelf(uint index) public constant returns(string, address) {
-        return (bookshelf[index].isbn, bookshelf[index].contractAddress);
+    function getBookshelf(uint index) public constant returns(string) {
+        return (bookshelf[index].isbn);
     }
 
     function borrowBook(address _bookContract) {
