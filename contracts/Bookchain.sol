@@ -8,8 +8,9 @@ contract Bookchain {
     Volume[] public bookshelf;
 
     struct Volume {
-        string isbn;
-        // address contractAddress;
+        bytes32 isbn;
+        address bookContractAddress;
+        bool status;
     }
     // available books array = dynamic array of available book structs
     // available book struct = { title, author, owner address?, image_url, book contract address}
@@ -23,9 +24,11 @@ contract Bookchain {
     modifier onlyOwner { if(msg.sender != owner) throw; _; }
 
     // Events
-    event bookAddedToShelf(address bookContract, string isbn, address owner);
-    event bookMadeAvailable(string isbn, address owner);
-    event bookMadeUnavailable(string isbn, address owner);
+    event bookAddedToShelf(address bookContract, bytes32 isbn, address owner);
+    event bookMadeAvailable(bytes32 isbn);
+    event bookMadeUnavailable(bytes32 isbn);
+
+    event refreshBookshelf();
 
     function Bookchain() {
         // set the contract owner
@@ -38,16 +41,17 @@ contract Bookchain {
         */
     }
 
-    function createBook(string _isbn) returns(bool) {
+    function createBook(bytes32 _isbn) returns(bool) {
         // when you create a book 
-        // address newBook = new Book(_isbn, owner /* arbiter */ );
+        address newBook = new Book(_isbn, owner);
         // store address in bookshelf array
         bookshelf.push( Volume({
             isbn: _isbn,
-            // contractAddress: address(newBook)
+            bookContractAddress: address(newBook),
+            status: true,
         }));
         // trigger event for react frontend to pick up 
-        // bookAddedToShelf(address(newBook), _isbn, msg.sender);
+        bookAddedToShelf(address(newBook), _isbn, msg.sender);
         return true;
         // and it returns true
         /*
@@ -59,9 +63,27 @@ contract Bookchain {
         return bookshelf.length;
     }
 
-    function getBookshelf(uint index) public constant returns(string) {
-        return (bookshelf[index].isbn);
+    function getBookshelf() public constant returns(bytes32[], address[], bool[]) {
+        
+        uint length = bookshelf.length;
+        
+        bytes32[] memory isbns = new bytes32[](length);
+        address[] memory contractAddresses = new address[](length);
+        bool[] memory currentStatus = new bool[](length);
+        
+        for (uint i = 0; i < length; i++) {
+            Volume memory currentVolume;
+            currentVolume = bookshelf[i];
+            
+            isbns[i] = currentVolume.isbn;
+            contractAddresses[i] = currentVolume.bookContractAddress;
+            currentStatus[i] = currentVolume.status;
+        }
+        
+        
+        return (isbns, contractAddresses, currentStatus);
     }
+
 
     function borrowBook(address _bookContract) {
         // if book is available

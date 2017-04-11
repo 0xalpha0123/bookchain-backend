@@ -12,7 +12,7 @@ contract Book {
     address public borrower;
 
     // Book State
-    string public isbn;
+    bytes32 public isbn;
     address public owner;
 
     enum Status { Available, Unavailable }
@@ -25,7 +25,7 @@ contract Book {
     
 
     // Constructor
-    function Book(string _isbn, address _arbiter) {
+    function Book(bytes32 _isbn, address _arbiter) {
         owner = msg.sender;
         isbn = _isbn;
         status = Status.Available;
