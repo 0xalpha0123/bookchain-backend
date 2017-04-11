@@ -1,6 +1,6 @@
 pragma solidity ^0.4.8;
 import "./Book.sol";
-import "./BookCoin.sol";
+// import "./BookCoin.sol";
 
 contract Bookchain {
 
@@ -12,10 +12,11 @@ contract Bookchain {
         address bookContractAddress;
         bool status;
     }
-    // available books array = dynamic array of available book structs
-    // available book struct = { title, author, owner address?, image_url, book contract address}
-
-    // address (public?) bookcoinAddress; or is this an inheritance
+    
+    // mapping of isbn to book contract address for created books
+    mapping(bytes32 => address) public checkBook;
+    // who currently is borrowing a bookContract
+    mapping(address => address) public checkoutLedger;
 
     // Bookchain State
     address public owner;
@@ -24,10 +25,9 @@ contract Bookchain {
     modifier onlyOwner { if(msg.sender != owner) throw; _; }
 
     // Events
-    event bookAddedToShelf(address bookContract, bytes32 isbn, address owner);
+    event bookAddedToShelf(address bookContract, bytes32 isbn);
     event bookMadeAvailable(bytes32 isbn);
     event bookMadeUnavailable(bytes32 isbn);
-
     event refreshBookshelf();
 
     function Bookchain() {
@@ -39,28 +39,67 @@ contract Bookchain {
             give minter 1000BKC
             set currency contract address 
         */
+        // address bookcoinContract = new BookCoin (1000, owner);
+    }
+
+    function checkoutBook(bytes32 _isbn) returns(bool) {
+        // does book exist?
+        if (checkBook[_isbn] == 0) {throw;}
+        // does user already have a book checked out
+        if (checkoutLedger[msg.sender] != 0) {throw;}
+        // set book mapping status to unavailable
+        uint length = bookshelf.length;
+        for (uint i = 0; i < length; i++) {
+            Volume memory currentVolume;
+            currentVolume = bookshelf[i];
+            // set book contract status to unavailable
+            if (currentVolume.isbn == _isbn) {
+                bookshelf[i].status = false;
+                // set current borrower of book
+                checkoutLedger[msg.sender] = currentVolume.bookContractAddress;
+                return true;
+            }
+        }
+    }
+
+    function returnBook(bytes32 _isbn) returns(bool) {
+        if (checkoutLedger[msg.sender] == 0) {throw;}
+
+        uint length = bookshelf.length;
+        for (uint i = 0; i < length; i++) {
+            Volume memory currentVolume;
+            currentVolume = bookshelf[i];
+            // set book contract status to unavailable
+            if (currentVolume.isbn == _isbn) {
+                if (checkoutLedger[msg.sender] != currentVolume.bookContractAddress) {throw;}
+                bookshelf[i].status = true;
+                // set current borrower of book
+                checkoutLedger[msg.sender] = 0;
+                return true;
+            }
+        }
     }
 
     function createBook(bytes32 _isbn) returns(bool) {
-        // when you create a book 
-        address newBook = new Book(_isbn, owner);
-        // store address in bookshelf array
-        bookshelf.push( Volume({
-            isbn: _isbn,
-            bookContractAddress: address(newBook),
-            status: true,
-        }));
-        // trigger event for react frontend to pick up 
-        bookAddedToShelf(address(newBook), _isbn, msg.sender);
-        return true;
-        // and it returns true
-        /*
-            msg.sender gets 3BKC
-        */
-    }
-
-    function getBookshelfCount() public constant returns(uint) {
-        return bookshelf.length;
+        // check if book exists
+        if (checkBook[_isbn] == 0) {
+            address newBook = new Book(_isbn, msg.sender, owner);
+            // store address in bookshelf array
+            bookshelf.push( Volume({
+                isbn: _isbn,
+                bookContractAddress: address(newBook),
+                status: true,
+            }));
+            checkBook[_isbn] = newBook;
+            // trigger event for react frontend to pick up 
+            bookAddedToShelf(address(newBook), _isbn);
+            return true;
+            /*
+                msg.sender gets 3BKC
+            */
+        } else {
+            return false;
+        }
     }
 
     function getBookshelf() public constant returns(bytes32[], address[], bool[]) {
@@ -79,33 +118,7 @@ contract Bookchain {
             contractAddresses[i] = currentVolume.bookContractAddress;
             currentStatus[i] = currentVolume.status;
         }
-        
-        
         return (isbns, contractAddresses, currentStatus);
-    }
-
-
-    function borrowBook(address _bookContract) {
-        // if book is available
-
-        // create a borrow agreement b/w owner and borrower
-        // collect deposits
-        /*
-            upon completion both parties get 1BKC
-        */
-    }
-
-    // returns structs/tuples with info for all available books 
-    // title, author, image_url, contract address
-    // 
-    // maybe: event in book contract to update available books array
-    //        when status of book changes
-
-    function availableBooks() {
-        // for each address in bookshelf
-        // if book.status is available
-        // push struct of {title, author, owner address?, image_url, book contract address} 
-        // to available books array
     }
 
     // contract self-destruct

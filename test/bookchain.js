@@ -22,7 +22,7 @@ contract('Bookchain', function(accounts) {
       // bookchain.getBookshelfCount().then(function(bookshelfCount) {
       //   assert.equal(bookshelfCount, 1)
       // });
-      bookchain.getBookshelf(0).then(function(volume) {
+      bookchain.getBookshelf().then(function(volume) {
         assert.equal(volume, '100')
       });
     });

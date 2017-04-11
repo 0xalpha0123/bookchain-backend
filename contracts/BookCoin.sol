@@ -27,7 +27,8 @@ contract BookCoin {
   modifier onlyMinter { if (msg.sender != centralMinter) throw; _; }
 
   // Constructor
-  function BookCoin(uint256 _initialAmount) {
+  function BookCoin(uint256 _initialAmount, address _minter) {
+    centralMinter = _minter;
     balances[msg.sender] = _initialAmount;
     totalSupply = _initialAmount;
     name = "BookCoin";

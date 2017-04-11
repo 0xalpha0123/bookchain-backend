@@ -25,8 +25,8 @@ contract Book {
     
 
     // Constructor
-    function Book(bytes32 _isbn, address _arbiter) {
-        owner = msg.sender;
+    function Book(bytes32 _isbn, address _owner, address _arbiter) {
+        owner = _owner;
         isbn = _isbn;
         status = Status.Available;
         arbiter = _arbiter;
