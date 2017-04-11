@@ -4,7 +4,7 @@ import "./Book.sol";
 
 contract Bookchain {
 
-    // bookshelf array = all book contract addresses 
+    // bookshelf array = all book contract addresses
     Volume[] public bookshelf;
 
     struct Volume {
@@ -12,7 +12,7 @@ contract Bookchain {
         address bookContractAddress;
         bool status;
     }
-    
+
     // mapping of isbn to book contract address for created books
     mapping(bytes32 => address) public checkBook;
     // who currently is borrowing a bookContract
@@ -37,7 +37,7 @@ contract Bookchain {
             create new BookCoin contract
             set owner to minter
             give minter 1000BKC
-            set currency contract address 
+            set currency contract address
         */
         // address bookcoinContract = new BookCoin (1000, owner);
     }
@@ -91,7 +91,7 @@ contract Bookchain {
                 status: true,
             }));
             checkBook[_isbn] = newBook;
-            // trigger event for react frontend to pick up 
+            // trigger event for react frontend to pick up
             bookAddedToShelf(address(newBook), _isbn);
             return true;
             /*
@@ -103,17 +103,17 @@ contract Bookchain {
     }
 
     function getBookshelf() public constant returns(bytes32[], address[], bool[]) {
-        
+
         uint length = bookshelf.length;
-        
+
         bytes32[] memory isbns = new bytes32[](length);
         address[] memory contractAddresses = new address[](length);
         bool[] memory currentStatus = new bool[](length);
-        
+
         for (uint i = 0; i < length; i++) {
             Volume memory currentVolume;
             currentVolume = bookshelf[i];
-            
+
             isbns[i] = currentVolume.isbn;
             contractAddresses[i] = currentVolume.bookContractAddress;
             currentStatus[i] = currentVolume.status;
