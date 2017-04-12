@@ -1,6 +1,6 @@
 pragma solidity ^0.4.8;
 import "./Book.sol";
-// import "./BookCoin.sol";
+import "./BookCoin.sol";
 
 contract Bookchain {
 
@@ -20,6 +20,7 @@ contract Bookchain {
 
     // Bookchain State
     address public owner;
+    address public bookcoinContract;
 
     // Modifiers
     modifier onlyOwner { if(msg.sender != owner) throw; _; }
@@ -39,10 +40,39 @@ contract Bookchain {
             give minter 1000BKC
             set currency contract address 
         */
-        // address bookcoinContract = new BookCoin (1000, owner);
+        bookcoinContract = new BookCoin(1000, msg.sender);
+    }
+    
+    function bookcoinTotalSupply() returns (uint256) {
+        BookCoin bkc = BookCoin(bookcoinContract);
+        return bkc.totalSupply();
+    }
+    
+    function getBalance(address _account) returns (uint256) {
+        BookCoin bkc = BookCoin(bookcoinContract);
+        return bkc.balanceOf(_account);
+    }
+    
+    function payment(address _from, address _to, uint256 _amount) returns (bool) {
+        BookCoin bkc = BookCoin(bookcoinContract);
+        if (bkc.transferFrom(_from, _to, _amount) ) {
+            return true;
+        }
+        return false;
+    }
+    
+    function registerUser() returns (bool) {
+        BookCoin bkc = BookCoin(bookcoinContract);
+        if (bkc.balanceOf(msg.sender) == 0) {
+            bkc.transfer(msg.sender, 10);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     function checkoutBook(bytes32 _isbn) returns(bool) {
+        if (getBalance(msg.sender) < 1) {throw;}
         // does book exist?
         if (checkBook[_isbn] == 0) {throw;}
         // does user already have a book checked out
@@ -54,10 +84,13 @@ contract Bookchain {
             currentVolume = bookshelf[i];
             // set book contract status to unavailable
             if (currentVolume.isbn == _isbn) {
-                bookshelf[i].status = false;
-                // set current borrower of book
-                checkoutLedger[msg.sender] = currentVolume.bookContractAddress;
-                return true;
+                BookCoin bkc = BookCoin(bookcoinContract);
+                if (bkc.transferFrom(msg.sender, this, 1)) {
+                    bookshelf[i].status = false;
+                    // set current borrower of book
+                    checkoutLedger[msg.sender] = currentVolume.bookContractAddress;
+                    return true;                    
+                }
             }
         }
     }
@@ -72,12 +105,16 @@ contract Bookchain {
             // set book contract status to unavailable
             if (currentVolume.isbn == _isbn) {
                 if (checkoutLedger[msg.sender] != currentVolume.bookContractAddress) {throw;}
+                BookCoin bkc = BookCoin(bookcoinContract);
+                bkc.mint(1);
+                bkc.transferFrom(this, msg.sender, 2);
                 bookshelf[i].status = true;
                 // set current borrower of book
                 checkoutLedger[msg.sender] = 0;
                 return true;
             }
         }
+
     }
 
     function createBook(bytes32 _isbn) returns(bool) {

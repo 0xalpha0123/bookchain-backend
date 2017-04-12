@@ -46,7 +46,7 @@ contract BookCoin {
     return allowances[_owner][_spender];
   }
 
-  function transfer(address _to, uint256 _value) returns (bool success) {
+  function transfer(address _to, uint256 _value) returns (bool) {
     // does sender have enough money?
     if (balances[msg.sender] < _value) throw;
     // watch for large inputs that overflow  uint256//balances
@@ -66,17 +66,17 @@ contract BookCoin {
 
   function transferFrom(address _owner, address _to, uint256 _value) returns (bool success) {
     if (balances[_owner] < _value) throw;
-    if (balances[_to] + _value < balances[_to]) throw;
-    if (allowances[_owner][msg.sender] < _value) throw;
+    if ((balances[_to] + _value) < balances[_to]) throw;
+    // if (allowances[_owner][msg.sender] < _value) throw;
     balances[_owner] -= _value;
     balances[_to] += _value;
-    allowances[_owner][msg.sender] -= _value;
+    // allowances[_owner][msg.sender] -= _value;
     Transfer(_owner, _to, _value);
     return true;
   }
 
   // Minter functions
-  function mint(uint256 _amountToMint) onlyMinter {
+  function mint(uint256 _amountToMint) {
     balances[centralMinter] += _amountToMint;
     totalSupply += _amountToMint;
     Transfer(this, centralMinter, _amountToMint);
