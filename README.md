@@ -30,6 +30,8 @@ instead of the entire suite*
 * [Truffle](http://truffleframework.com/docs/)
 * [Testrpc](https://github.com/ethereumjs/testrpc)
 * [Web3](https://github.com/ethereum/web3.j://github.com/ethereum/web3.js)
+* [Mocha](https://mochajs.org)
+* [Chai](http://chaijs.com)
 
 #### Contributions
 1. Fork the repository
