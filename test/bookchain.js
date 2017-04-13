@@ -27,6 +27,4 @@ contract('Bookchain', function(accounts) {
       });
     });
   });
-
-
 });
