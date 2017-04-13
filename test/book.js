@@ -1,17 +1,7 @@
 var Book = artifacts.require("Book");
 contract('Book', function(accounts) {
 
-  xit('should have a title', function() {
-    var newBook = Book.new("Moby Dick", "Van Dyke");
-    return newBook.then(function(book) {
-      return book.title.call();
-    }).then(function(title) {
-      var parsedString = web3.toAscii(title);
-      assert.include(parsedString, 'Moby Dick');
-    });
-  });
-
-  xit('should be available by default', function() {
+  it('should be available by default', function() {
     var newBook = Book.new("Moby Dick", "Van Dyke");
     return newBook.then(function(book) {
       return book.isAvailable.call();
@@ -20,7 +10,7 @@ contract('Book', function(accounts) {
     });
   });
 
-  xit('should be unavailable after being checked out', function() {
+  it('should be unavailable after being checked out', function() {
     var newBook = Book.new("Moby Dick", "Van Dyke");
     return newBook.then(function(book) {
       return book;
@@ -30,24 +20,19 @@ contract('Book', function(accounts) {
     });
   });
 
-  xit('should be available after being returned', function() {
+  it('should be available after being returned', function() {
     var newBook = Book.new("Moby Dick", "Van Dyke");
     return newBook.then(function(book) {
       return book;
     }).then(function(book) {
-      // eval(pry.it)
       book.checkout();
-      book.isAvailable().then(function(book) {
-        assert.isNotTrue(book);
-      });
+      book.isAvailable().then(function(book) { assert.isNotTrue(book); });
       book.returnBook();
-      book.isAvailable().then(function(book) {
-        assert.isTrue(book);
-      });
+      book.isAvailable().then(function(book) { assert.isTrue(book); });
     });
   });
 
-  xit('validates checkout function', function() {
+  it('validates checkout function', function() {
     var newBook = Book.new("Moby Dick", "Van Dyke");
     return newBook.then(function(book) {
       return book;
@@ -56,7 +41,7 @@ contract('Book', function(accounts) {
     });
   });
 
-  xit('validates returnBook function', function() {
+  it('validates returnBook function', function() {
     var newBook = Book.new("Moby Dick", "Van Dyke");
     return newBook.then(function(book) {
       return book;

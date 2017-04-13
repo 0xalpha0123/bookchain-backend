@@ -19,11 +19,11 @@ contract('Bookchain', function(accounts) {
     var newBookIsbn = 123456789;
     return newBookchain.then(function(bookchain) {
       bookchain.createBook(newBookIsbn, {from: owner});
-      // bookchain.getBookshelfCount().then(function(bookshelfCount) {
-      //   assert.equal(bookshelfCount, 1)
-      // });
-      bookchain.getBookshelf().then(function(volume) {
-        assert.equal(volume, '100')
+      bookchain.getBookshelf().then(function(bookInformation) {
+        var bookAvailability = bookInformation[2].pop();
+
+        assert.equal(3, bookInformation.length);
+        assert.isTrue(bookAvailability,'After adding a book, it should be available.');
       });
     });
   });
