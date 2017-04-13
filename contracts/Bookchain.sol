@@ -43,9 +43,8 @@ contract Bookchain {
         bookcoinContract = new BookCoin(1000, msg.sender);
     }
     
-    function bookcoinTotalSupply() returns (uint256) {
-        BookCoin bkc = BookCoin(bookcoinContract);
-        return bkc.totalSupply();
+    function bookcoinTotalSupply() returns (uint) {
+        return BookCoin(bookcoinContract).totalSupply();
     }
     
     function getBalance(address _account) returns (uint256) {
@@ -72,11 +71,11 @@ contract Bookchain {
     }
 
     function checkoutBook(bytes32 _isbn) returns(bool) {
-        if (getBalance(msg.sender) < 1) {throw;}
-        // does book exist?
-        if (checkBook[_isbn] == 0) {throw;}
-        // does user already have a book checked out
-        if (checkoutLedger[msg.sender] != 0) {throw;}
+        // if (getBalance(msg.sender) < 1) {throw;}
+        // // does book exist?
+        // if (checkBook[_isbn] == 0) {throw;}
+        // // does user already have a book checked out
+        // if (checkoutLedger[msg.sender] != 0) {throw;}
         // set book mapping status to unavailable
         uint length = bookshelf.length;
         for (uint i = 0; i < length; i++) {

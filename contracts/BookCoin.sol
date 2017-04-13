@@ -4,7 +4,7 @@ contract BookCoin {
   // ERC20 State
   mapping (address => uint256) public balances;
   mapping (address => mapping (address => uint256)) public allowances;
-  uint256 public totalSupply;
+  uint public totalSupply;
 
   // Human State
   string public name;
