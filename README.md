@@ -2,13 +2,13 @@
 
 This is Bookchain, it is a decentralized virtual library to keep track of your physical library. Library? Yes, we do mean books.
 This app consists of two components, this is the back-end portion. The front-end
-is written in React, and is located here [Bookchain-react](https://github.com/Sh1pley/bookchain-react). This repository is written in Solidity and is built upon the block chain.
+is written in React, and is located here [Bookchain-Interface](https://github.com/lahm0123/bookchain-interface). This repository is written in Solidity and is built upon the block chain.
 
 #### Getting Started
 
 1.  This project is built in Solidity, want more info? See the resources section
     below.
-2.  git clone or fork this repository `$ git clone https://github.com/njgheorghita/bookchain.git`
+2.  git clone or fork this repository `$ git clone https://github.com/lahm0123/bookchain-backend.git`
 3.  Install Solidity `$ npm install -g solc`
 4.  Install Truffle `$ npm install -g truffle`
 5.  Install Testrpc `$ npm install ethereumjs-testrpc`
